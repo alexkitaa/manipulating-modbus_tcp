@@ -23,35 +23,49 @@ To isolate the traffic between the target PLC and the testing machine, apply the
 ```wireshark
 ip.addr == 172.16.10.5 && ip.addr == 172.16.10.25 && modbus
 ```
-
 ## 4. Lab Test Cases & Execution
 
 ### Test Case A: Reading Holding Registers (`FC 03`)
-
 * **Command:**
   ```bash
-  mbpoll -a 1 -r 1 -c 10 -t 3 172.16.10.25
+  mbpoll -m tcp -a 1 -p 502 -t 4 -r 1 -c 10 -1 172.16.10.25
   ```
 * **Description:** Reads 10 holding registers starting at address 1 (offset `0x0000`) from Slave ID 1.
 * **Wireshark Payload:** Look for Function Code `0x03`, starting address `0x0000`, and quantity `0x000A`. Verify the byte count and returned register values in big-endian format.
 
-### Test Case B: Forcing a Single Coil (`FC 05`)
-
+### Test Case B: Reading Coils (`FC 01`)
 * **Command:**
   ```bash
-  mbpoll -a 1 -r 1 -t 0 -1 172.16.10.25 1
+  mbpoll -m tcp -a 1 -p 502 -t 0 -r 1 -c 10 -1 172.16.10.25
+  ```
+* **Description:** Reads 10 discrete coils starting at address 1 from Slave ID 1.
+* **Wireshark Payload:** Look for Function Code `0x01`, starting address `0x0000`, and quantity `0x000A`.
+
+### Test Case C: Writing a Single Coil (`FC 05`)
+* **Command:**
+  ```bash
+  mbpoll -m tcp -a 1 -p 502 -t 0 -r 1 -1 172.16.10.25 1
   ```
 * **Description:** Forces Coil at address 1 (offset `0x0000`) to `ON` (`1`) on Slave ID 1.
 * **Wireshark Payload:** Look for Function Code `0x05`, Output Address `0x0000`, and Value `0xFF00` (ON). Confirm the OpenPLC state changes accordingly.
 
-### Test Case C: Writing to Holding Registers (`FC 16` / `0x10`)
-
+### Test Case D: Writing to Holding Registers (`FC 16` / `0x10`)
 * **Command:**
   ```bash
-  mbpoll -a 1 -r 1 -t 4 172.16.10.25 1234
+  mbpoll -m tcp -a 1 -p 502 -t 4 -r 1 -1 172.16.10.25 35
   ```
-* **Description:** Writes value `1234` to the holding register starting at offset 0.
-* **Wireshark Payload:** Look for Function Code `0x10`, Register Address `0x0000`, quantity, and hex value encoding (`0x04D2`).
+* **Description:** Writes value `35` to the holding register starting at offset 0.
+* **Wireshark Payload:** Look for Function Code `0x10`, Register Address `0x0000`, quantity, and hex value encoding.
+
+### Test Case E: Reading Holding Registers After Write (`FC 03`)
+* **Command:**
+  ```bash
+  mbpoll -m tcp -a 1 -p 502 -t 4 -r 1 -c 10 -1 172.16.10.25
+  ```
+* **Description:** Reads back the 10 holding registers to verify that the value `35` was successfully written and updated in the PLC memory map.
+
+<img width="1362" height="603" alt="modbus_manipulation" src="https://github.com/user-attachments/assets/f826132f-32e5-414b-9716-c844d140611f" />
+
 
 ## 5. Security Findings & Takeaways
 
