@@ -14,8 +14,6 @@ The lab environment consists of **two separate VirtualBox virtual machines** con
 
 <img width="1408" height="768" alt="network diagram" src="https://github.com/user-attachments/assets/7fa68c71-5764-4fa4-8523-d8516ed1f275" />
 
-> **Packet Capture Available:** A recorded Wireshark packet capture (`.pcap`) of the lab traffic is included in the [PCAP](pcap/) folder of this repository for offline inspection and analysis.
-
 ## 3. Wireshark Capture Filter
 
 To isolate the traffic between the target PLC and the testing machine, apply the following display filter in Wireshark:
@@ -66,6 +64,7 @@ ip.addr == 172.16.10.5 && ip.addr == 172.16.10.25 && modbus
 
 <img width="1362" height="603" alt="modbus_manipulation" src="https://github.com/user-attachments/assets/f826132f-32e5-414b-9716-c844d140611f" />
 
+> **Packet Capture Available:** A recorded Wireshark packet capture (`.pcap`) of the lab traffic is included in the [PCAP](pcap/) folder of this repository for offline inspection and analysis.
 
 ## 5. Security Findings & Takeaways
 
