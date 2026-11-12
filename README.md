@@ -12,7 +12,9 @@ The lab environment consists of **two separate VirtualBox virtual machines** con
 * **VM 2 – Modbus Client / Attacker (`mbpoll` + Wireshark):** `172.16.10.5`
 * **Protocol:** Modbus TCP
 
-> **Packet Capture Available:** A recorded Wireshark packet capture (`.pcap`) of the lab traffic is included in the `pcap/` folder of this repository for offline inspection and analysis.
+<img width="1408" height="768" alt="network diagram" src="https://github.com/user-attachments/assets/7fa68c71-5764-4fa4-8523-d8516ed1f275" />
+
+> **Packet Capture Available:** A recorded Wireshark packet capture (`.pcap`) of the lab traffic is included in the [PCAP](pcap/) folder of this repository for offline inspection and analysis.
 
 ## 3. Wireshark Capture Filter
 
